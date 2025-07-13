@@ -2,7 +2,7 @@
 
 ```python
 from bookshelf.models import Book
-book = Book.objects.filter(title="1984").first()
+book = Book.objects.get(title="1984")
 print(book.title)
 print(book.author)
 print(book.publication_year)
