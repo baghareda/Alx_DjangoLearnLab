@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic.detail import DetailView  # ✅ Required for checker
 from django.views.generic import DetailView  # Still needed
 from .models import Book, Library
+from .models import Library
+from .models import Book
 
 def list_books(request):
     books = Book.objects.all()
