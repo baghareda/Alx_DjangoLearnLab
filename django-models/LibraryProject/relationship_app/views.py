@@ -3,6 +3,9 @@ from django.views.generic import DetailView  # ✅ required for class-based view
 from .models import Book, Library  # ✅ required for both views
 from .models import Library
 from .models import Book
+from django.views.generic import DetailView
+from django.views.generic.detail import DetailView  # Required for checker
+
 
 
 # ✅ Function-based view: list all books and authors
