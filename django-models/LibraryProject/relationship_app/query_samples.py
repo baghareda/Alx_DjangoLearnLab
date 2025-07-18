@@ -57,3 +57,16 @@ def list_libraries_by_author(author_name):
             print(lib)
     except Author.DoesNotExist:
         print(f"Author '{author_name}' not found.")
+        
+def get_librarian_for_library(library_name):
+    from relationship_app.models import Library, Librarian
+
+    try:
+        library = Library.objects.get(name=library_name)
+        librarian = Librarian.objects.get(library=library)
+        print(f"Librarian for {library.name}: {librarian.name}")
+    except Library.DoesNotExist:
+        print(f"Library '{library_name}' not found.")
+    except Librarian.DoesNotExist:
+        print(f"No librarian found for '{library_name}'.")
+
