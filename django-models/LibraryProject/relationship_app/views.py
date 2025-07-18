@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import DetailView  # ✅ required for class-based view
 from .models import Book, Library  # ✅ required for both views
+from .models import Library
+from .models import Book
+
 
 # ✅ Function-based view: list all books and authors
 def list_books(request):
