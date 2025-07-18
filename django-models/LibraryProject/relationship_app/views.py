@@ -4,7 +4,8 @@ from .models import Book, Library  # ✅ required for both views
 from .models import Library
 from .models import Book
 from django.views.generic import DetailView
-from django.views.generic.detail import DetailView  # Required for checker
+from django.views.generic.detail import DetailView
+from .views import list_books
 
 
 
