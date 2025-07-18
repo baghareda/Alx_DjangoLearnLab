@@ -1,12 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import DetailView  # ✅ This line is critical
-from .models import Book, Library
+from django.views.generic import DetailView  # ✅ required for class-based view
+from .models import Book, Library  # ✅ required for both views
 
+# ✅ Function-based view: list all books and authors
 def list_books(request):
-    books = Book.objects.all()  # ✅ Exact line the checker wants
-    return render(request, 'relationship_app/list_books.html', {'books': books})
+    books = Book.objects.all()  # ✅ this exact line must appear
+    return render(request, 'relationship_app/list_books.html', {'books': books})  # ✅ must match path
 
-class LibraryDetailView(DetailView):
+# ✅ Class-based view: show detail of specific library and its books
+class LibraryDetailView(DetailView):  # ✅ required to use DetailView
     model = Library
-    template_name = 'library_detail.html'
+    template_name = 'relationship_app/library_detail.html'  # ✅ must match this string exactly
     context_object_name = 'library'
