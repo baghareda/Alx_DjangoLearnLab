@@ -23,6 +23,12 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        permissions = [
+            ("can_view_book", "Can view book"),
+            ("can_edit_book", "Can edit book"),
+        ]
+
 class Librarian(models.Model):
     name = models.CharField(max_length=100)
     library = models.OneToOneField(Library, on_delete=models.CASCADE)
