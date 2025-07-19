@@ -4,6 +4,8 @@ from .models import Book, Author, Library
 from .forms import BookForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 
 def is_member(user):
