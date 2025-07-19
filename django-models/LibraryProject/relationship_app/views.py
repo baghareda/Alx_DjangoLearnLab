@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from django.shortcuts import render
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.detail import DetailView
+from .models import Library
 
 
 def is_member(user):
@@ -74,3 +76,12 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+def list_books(request):
+    books = Book.objects.all()
+    return render(request, 'relationship_app/list_books.html', {'books': books})
+
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = 'relationship_app/library_detail.html'
+    context_object_name = 'library'
