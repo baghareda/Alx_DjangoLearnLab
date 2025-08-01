@@ -33,3 +33,8 @@ class CustomUser(AbstractUser):
 
     class Meta:
         managed = False  # This prevents migrations and DB table creation
+        
+class CustomUserAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(CustomUser, CustomUserAdmin)
