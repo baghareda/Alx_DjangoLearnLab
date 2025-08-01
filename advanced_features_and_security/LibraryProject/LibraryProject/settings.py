@@ -151,6 +151,36 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", 'https://trusted-cdn.com')
 CSP_STYLE_SRC = ("'self'", 'https://trusted-cdn.com')
 
+# === HTTPS and Security Settings ===
+
+# Redirect all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# === Secure Cookies ===
+
+# Ensures session cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+# Ensures CSRF cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# === Security Headers ===
+
+# Prevent browsers from guessing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser's XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Disallow embedding in frames (prevents clickjacking)
+X_FRAME_OPTIONS = 'DENY'
+
+
 
 
 
