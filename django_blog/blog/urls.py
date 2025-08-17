@@ -22,8 +22,9 @@ urlpatterns = [
 
     # Blog posts
     path("posts/", PostListView.as_view(), name="post-list"),          # /posts/
-    path("posts/new/", PostCreateView.as_view(), name="post-create"),  # /posts/new/
+    path('post/new/', PostCreateView.as_view(), name='post-create'),       # /post/new/
     path("posts/<int:pk>/", PostDetailView.as_view(), name="post-detail"),        # /posts/1/
     path("posts/<int:pk>/edit/", PostUpdateView.as_view(), name="post-update"),   # /posts/1/edit/
-    path("posts/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"), # /posts/1/delete/
+    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'), # /post/1/delete/
+    path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),  # /post/1/update/
 ]
