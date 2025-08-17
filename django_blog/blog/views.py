@@ -14,6 +14,7 @@ from django.db.models import Q
 from taggit.models import Tag
 
 
+
 # -------------------- AUTH VIEWS --------------------
 def register(request):
     if request.method == "POST":
@@ -161,3 +162,18 @@ def search_posts(request):
 def posts_by_tag(request, tag_name):
     posts = Post.objects.filter(tags__name__in=[tag_name])
     return render(request, 'blog/post_list.html', {'posts': posts, 'tag_name': tag_name})
+
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # reuse post list template
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs['tag_slug']
+        return Post.objects.filter(tags__slug=tag_slug).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_slug'] = self.kwargs['tag_slug']
+        return context
