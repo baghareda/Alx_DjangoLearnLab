@@ -17,3 +17,8 @@
   <script src="{% static 'blog/app.js' %}"></script>
 </body>
 </html>
+
+<form method="GET" action="{% url 'search-posts' %}">
+    <input type="text" name="q" placeholder="Search posts..." required>
+    <button type="submit">Search</button>
+</form>
