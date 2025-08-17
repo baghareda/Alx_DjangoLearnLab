@@ -114,7 +114,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.post_id = self.kwargs['post_id']  # assumes URL contains post_id
+        form.instance.post_id = self.kwargs['post_id']
         return super().form_valid(form)
 
     def get_success_url(self):
