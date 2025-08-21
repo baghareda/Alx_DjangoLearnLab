@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),  # all auth endpoints under /api/
     path('', home_view),
+    path('api/', include('posts.urls')),
 ]
 
 if settings.DEBUG:
