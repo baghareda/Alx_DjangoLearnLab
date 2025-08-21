@@ -43,8 +43,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             email=validated_data.get("email"),
             password=validated_data["password"]
-        )
-        return user
+    )
+    # Create auth token for the new user
+    Token.objects.create(user=user)
+    return user
 
 
 # -----------------------------
