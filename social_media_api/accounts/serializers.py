@@ -19,36 +19,42 @@ class UserSerializer(serializers.ModelSerializer):
             'followers_count', 'following_count'
         ]
         read_only_fields = [
-            'id', 'username', 'email', 'followers_count', 'following_count', 'profile_picture'
+            'id', 'username', 'email', 'followers_count',
+            'following_count', 'profile_picture'
         ]
 
     def get_followers_count(self, obj):
-        return obj.followers.count()
+        return obj.followers.count() if hasattr(obj, "followers") else 0
 
     def get_following_count(self, obj):
-        return obj.following.count()
+        return obj.following.count() if hasattr(obj, "following") else 0
 
 
 # -----------------------------
 # Register Serializer
 # -----------------------------
 class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+
     class Meta:
-        model = get_user_model()
+        model = User
         fields = ["id", "username", "email", "password"]
-        extra_kwargs = {"password": {"write_only": True}}
+
+    def validate_email(self, value):
+        """Ensure email is unique."""
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already taken.")
+        return value
 
     def create(self, validated_data):
-        # ✅ Create user properly
+        # Create user securely
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"],
         )
-
-        # ✅ Create token for the new user
-        Token.objects.create(user=user)
-
+        # Generate auth token
+        Token.objects.get_or_create(user=user)
         return user
 
 
@@ -57,16 +63,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 # -----------------------------
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    token = serializers.CharField(read_only=True)
 
     def validate(self, data):
-        user = authenticate(
-            username=data.get('username'),
-            password=data.get('password')
-        )
-        if not user:
-            raise serializers.ValidationError("Invalid username or password")
-        data['user'] = user
+        username = data.get("username")
+        password = data.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise serializers.ValidationError("Invalid username or password.")
+        else:
+            raise serializers.ValidationError("Both username and password are required.")
+
+        token, _ = Token.objects.get_or_create(user=user)
+        data["user"] = user
+        data["token"] = token.key
         return data
 
 
@@ -76,4 +89,8 @@ class LoginSerializer(serializers.Serializer):
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['bio', 'profile_picture']  # allowed to update
+        fields = ['bio', 'profile_picture']
+        extra_kwargs = {
+            'bio': {'required': False},
+            'profile_picture': {'required': False},
+        }
