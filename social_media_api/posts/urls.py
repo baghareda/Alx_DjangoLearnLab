@@ -1,16 +1,13 @@
-# posts/urls.py ✅
-
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet
+from .views import PostViewSet, CommentViewSet, FeedView  # 👈 make sure FeedView exists in views.py
 
-# Create a router and register our viewsets
+# DRF router for posts and comments
 router = DefaultRouter()
 router.register(r'posts', PostViewSet, basename='post')
 router.register(r'comments', CommentViewSet, basename='comment')
 
-# The API URLs are now determined automatically by the router
 urlpatterns = [
-    path('', include(router.urls)),   # include router-generated URLs
+    path('', include(router.urls)),  # posts/ and comments/ endpoints
+    path('feed/', FeedView.as_view(), name='feed'),  # 👈 feed endpoint
 ]
-
