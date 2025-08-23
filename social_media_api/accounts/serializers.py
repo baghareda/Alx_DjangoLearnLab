@@ -11,8 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'followers_count', 'following_count']
-        read_only_fields = ['id', 'username', 'email', 'followers_count', 'following_count', 'profile_picture']
+        fields = [
+            'id', 'username', 'email', 'bio', 'profile_picture',
+            'followers_count', 'following_count'
+        ]
+        read_only_fields = [
+            'id', 'username', 'email', 'followers_count',
+            'following_count', 'profile_picture'
+        ]
 
     def get_followers_count(self, obj):
         return obj.followers.count() if hasattr(obj, "followers") else 0
@@ -34,12 +40,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        # Create user using proper manager
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"]
         )
-        Token.objects.get_or_create(user=user)
+        # Ensure token is created
+        Token.objects.create(user=user)
         return user
 
 
@@ -58,6 +66,7 @@ class LoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError("Both username and password are required.")
 
+        # Create token if it doesn't exist
         token, _ = Token.objects.get_or_create(user=user)
         data["user"] = user
         data["token"] = token.key
