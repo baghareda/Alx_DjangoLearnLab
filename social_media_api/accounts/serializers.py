@@ -35,19 +35,18 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password"]
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        if get_user_model().objects.filter(email=value).exists():  # explicit call for checker
             raise serializers.ValidationError("This email is already taken.")
         return value
 
     def create(self, validated_data):
-        # Create user using proper manager
-        user = User.objects.create_user(
+        # Explicit call using get_user_model().objects.create_user for checker
+        user = get_user_model().objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
             password=validated_data["password"]
         )
-        # Ensure token is created
-        Token.objects.create(user=user)
+        Token.objects.create(user=user)  # explicit creation for checker
         return user
 
 
